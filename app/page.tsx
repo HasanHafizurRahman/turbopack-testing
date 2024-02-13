@@ -1,16 +1,14 @@
 // Importing necessary modules
 "use client"
-import React, { useEffect, useState } from 'react';
+// Importing necessary modules
+import React, { useState, useEffect } from 'react';
 
 // Define the home page component
 export default function Page() {
-  let [contect, setContent] = useState(0)
-  useEffect(()=>{
-    for (let i =0; i < 1000; i++){
-      setContent(i);
-    }
-  },[])
+  // State to store the product data
   const [products, setProducts] = useState([]);
+  // State to store items in the cart
+  const [cartItems, setCartItems] = useState([]);
 
   // Fetch product data from the FakeStore API
   useEffect(() => {
@@ -19,21 +17,26 @@ export default function Page() {
       .then(data => setProducts(data))
       .catch(error => console.error('Error fetching products:', error));
   }, []);
+
+  // Function to handle adding items to the cart
+  const addToCart = (product) => {
+    setCartItems([...cartItems, product]);
+  };
+
   return (
     <div className="container">
       <header>
         <h1>Welcome to my Next.js Demo</h1>
       </header>
+      <nav>
+        {/* Display cart icon with item count */}
+        <div className="cart-icon">
+          🛒 {cartItems.length}
+        </div>
+      </nav>
       <main>
         <h2>Hello, Next.js!</h2>
         <p>This is a simple demo page using Next.js.</p>
-        <p>Next.js is a React framework that enables functionality such as server-side rendering and generating static websites.</p>
-        <p>It provides a great developer experience with features like automatic code splitting, hot module replacement, and route pre-fetching.</p>
-        <p>Next.js is widely used for building modern web applications and has a growing community.</p>
-        <p>This demo page showcases the basic setup of a Next.js application.</p>
-        <p>Feel free to explore the code and customize it according to your needs.</p>
-        <p>{contect}</p>
-        {/* Add more content or components here */}
         <div className="product-list">
           {products.map(product => (
             <div key={product.id} className="product">
@@ -41,6 +44,7 @@ export default function Page() {
               <h3>{product.title}</h3>
               <p>${product.price}</p>
               <p>{product.description}</p>
+              <button onClick={() => addToCart(product)}>Add to Cart</button>
             </div>
           ))}
         </div>
@@ -58,6 +62,9 @@ export default function Page() {
           text-align: center;
         }
         header {
+          margin-bottom: 20px;
+        }
+        nav {
           margin-bottom: 20px;
         }
         h1 {
@@ -83,6 +90,18 @@ export default function Page() {
           width: 100%;
           max-height: 200px;
           object-fit: cover;
+        }
+        button {
+          background-color: #4caf50;
+          color: white;
+          padding: 8px 16px;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+        .cart-icon {
+          font-size: 24px;
+          cursor: pointer;
         }
       `}</style>
     </div>
